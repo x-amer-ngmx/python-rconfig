@@ -12,7 +12,7 @@ before_install:
 
 install:
   - poetry install -v -E cli
-    pip install tox-travis
+  - pip install tox-travis
 
 script:
   - tox
