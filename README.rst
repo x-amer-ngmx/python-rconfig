@@ -1,9 +1,10 @@
 rconfig
 =======
 
-|build|
+  .. image:: https://travis-ci.org/ArtemAngelchev/python-rconfig.svg?branch=master
+      :target: https://travis-ci.org/ArtemAngelchev/python-rconfig
 
-.. |build| image:: https://travis-ci.org/ArtemAngelchev/python-rconfig.svg?branch=master
+  .. image:: http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat
 
 
   ``rconfig`` helps you to bring configs from a consul server to your
