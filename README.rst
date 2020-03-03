@@ -1,15 +1,25 @@
 rconfig
 =======
 
-  ``rconfig`` help to load configs from consul to environment variable.
+  ``rconfig`` helps you to load configs from consul server to your environment
+  variable.
 
 
 Installation
 ------------
 
+  Install the latest version with:
+
   ::
 
-    pip install python-rconfig
+    pip install -U python-rconfig
+
+
+  For command-line support, use the CLI option during installation:
+
+  ::
+
+    pip install -U "python-rconfig[cli]"
 
 
 Usecase
