@@ -353,8 +353,8 @@ testing = ["jaraco.itertools", "func-timeout"]
 cli = ["click"]
 
 [metadata]
-content-hash = "ce528a52e6714862dbc24aec778f92780f24e9fbcd25fca0c6ac3728879dde1e"
-python-versions = "3.6, <4"
+content-hash = "4cd91f939e25fd30717bc4534fc20d5d142986732810046a952ab506e0d569b6"
+python-versions = ">=3.6, <4"
 
 [metadata.files]
 astroid = [

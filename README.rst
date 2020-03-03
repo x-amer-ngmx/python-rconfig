@@ -1,6 +1,10 @@
 rconfig
 =======
 
+.. image:: https://travis-ci.org/ArtemAngelchev/python-rconfig.svg?branch=master
+    :target: https://travis-ci.org/ArtemAngelchev/python-rconfig.svg?branch=master
+
+
   ``rconfig`` helps you to bring configs from a consul server to your
   application.
 
