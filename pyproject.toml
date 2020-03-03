@@ -31,7 +31,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "3.6, <4"
+python = ">=3.6, <4"
 python-consul = "^1.1.0"
 
 click = {version = "^7.0", optional = true}
