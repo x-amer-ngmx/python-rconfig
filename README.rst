@@ -1,8 +1,8 @@
 rconfig
 =======
 
-  ``rconfig`` helps you to load configs from consul server to your environment
-  variable.
+  ``rconfig`` helps you to bring configs from a consul server to your
+  application.
 
 
 Installation
@@ -22,11 +22,11 @@ Installation
     pip install -U "python-rconfig[cli]"
 
 
-Usecase
--------
+Usage
+-----
 
-  First off all `rconfig` expects that you have the following key structure in
-  consul
+  First off all ``rconfig`` expects that you have the following key structure
+  on the consul server:
 
   ::
 
@@ -49,3 +49,11 @@ Usecase
                    |___<another-env-key>
                                |_____<key-value>
                                |_____<key-value>
+
+
+  Here root key stands for the name of the project when some have multiple
+  applications that grouped under some kind of common purpose (often when talk
+  about microservices).
+  Under common configuration key, you should store configurations that common
+  to all your applications in the project, in this case, it's much easier to
+  change the config in one place than go to multiple.
