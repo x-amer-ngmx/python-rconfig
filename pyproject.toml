@@ -4,6 +4,8 @@ version = "20.0a1"
 description = "Helps get configuration from consul server"
 license = "MIT"
 authors = ["Artem Angelchev <artangelchev@gmail.com>"]
+homepage = "https://github.com/ArtemAngelchev/python-rconfig"
+repository = "https://github.com/ArtemAngelchev/python-rconfig"
 packages = [{ include = "rconfig" }]
 readme = "README.rst"
 keywords = [
@@ -12,7 +14,8 @@ keywords = [
   "consul",
   "env",
   "python",
-  "environment variables",
+  "environment-variables",
+  "configuration-managment"
 ]
 classifiers = [
   "Programming Language :: Python",
