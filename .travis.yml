@@ -22,10 +22,8 @@ before_deploy:
 
 deploy:
   provider: script
-  script:
-    - ls -l
-    - poetry publish
-  skip_cleanup: true
+  script: poetry publish
+  cleanup: true
   on:
     tags: true
     condition: "$TRAVIS_PYTHON_VERSION == 3.8"
