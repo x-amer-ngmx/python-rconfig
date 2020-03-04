@@ -17,6 +17,7 @@ script:
   - tox
 
 before_deploy:
+  - ls -l
   - poetry config http-basic.pypi $PYPI_USER $PYPI_PASSWORD
   - poetry build
 
