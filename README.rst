@@ -4,10 +4,13 @@ rconfig
   .. image:: https://travis-ci.org/ArtemAngelchev/python-rconfig.svg?branch=master
       :target: https://travis-ci.org/ArtemAngelchev/python-rconfig
 
-  .. image:: http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat
-
   .. image:: https://coveralls.io/repos/github/ArtemAngelchev/python-rconfig/badge.svg?branch=master
       :target: https://coveralls.io/github/ArtemAngelchev/python-rconfig?branch=master
+
+  .. image:: https://badge.fury.io/py/python-rconfig.svg
+      :target: https://badge.fury.io/py/python-rconfig
+
+  .. image:: http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat
 
 
   ``rconfig`` helps you to bring configs from a consul server to your
