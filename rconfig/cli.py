@@ -1,9 +1,10 @@
+import json
+import os
 import sys
 from pprint import pformat
 
-from rconfig import (
-    _serialize_value, _set_environment_variables, load_config_from_consul,
-)
+from rconfig import _set_environment_variables, load_config_from_consul
+from rconfig.utils import to_bash
 
 
 try:
@@ -13,45 +14,44 @@ except ImportError:
 
 
 @click.group()
-@click.option('-h', '--host', required=True, help='Host of consul server')
 @click.option(
-    '-p', '--port', default=8500, type=click.INT, help='Port of consul server',
+    '-h',
+    '--host',
+    required=True,
+    default=os.environ.get('RCONFIG_CONSUL_HOST'),
+    show_default=True,
+    help='Host of a consul server',
 )
 @click.option(
-    '-a', '--access', required=True, help='Access key to consul server',
+    '-a',
+    '--access',
+    required=True,
+    default=os.environ.get('RCONFIG_CONSUL_ACCESS_KEY'),
+    show_default=True,
+    help='Access key for a consul server',
 )
-@click.option('--root', required=True, help='Root key')
-@click.option('--app', required=True, help='Application key')
-@click.option('--env', required=True, help='Environment key')
-@click.option('--common', default='common', help='Common key')
+@click.option(
+    '-p',
+    '--port',
+    type=click.INT,
+    default=os.environ.get('RCONFIG_CONSUL_PORT', 8500),
+    show_default=True,
+    help='Port of consul server',
+)
+@click.option('-k', '--key', required=True, multiple=True, help='Consul key')
 @click.pass_context
-def cli(ctx, host, port, access, root, app, env, common):
+def cli(ctx, host, port, access, key):
+    config = load_config_from_consul(host, port, access, *key)
     ctx.obj = dict()
-    ctx.obj['HOST'] = host
-    ctx.obj['PORT'] = port
-    ctx.obj['ACCESS'] = access
-    ctx.obj['ROOT'] = root
-    ctx.obj['APP'] = app
-    ctx.obj['ENV'] = env
-    ctx.obj['COMMON'] = common
+    ctx.obj['CONFIG'] = config
 
 
 @cli.command()
 @click.pass_context
 def list(ctx):  # pylint: disable=redefined-builtin
     "Show all config for given keys"
-    host = ctx.obj['HOST']
-    port = ctx.obj['PORT']
-    access = ctx.obj['ACCESS']
-    root = ctx.obj['ROOT']
-    app = ctx.obj['APP']
-    env = ctx.obj['ENV']
-    common = ctx.obj['COMMON']
-    config = load_config_from_consul(
-        host, port, access, root, app, env, common,
-    )
-    if config:
-        click.echo(pformat(config))
+    if ctx.obj['CONFIG']:
+        click.echo(pformat(ctx.obj['CONFIG']))
     else:
         click.echo('No config for given keys')
         sys.exit(1)
@@ -62,17 +62,8 @@ def list(ctx):  # pylint: disable=redefined-builtin
 @click.option('--prefix', default='', help='Prefix for environment keys')
 def set_envs(ctx, prefix):  # pylint: disable=R0913
     "Set envs in current subprocess"
-    host = ctx.obj['HOST']
-    port = ctx.obj['PORT']
-    access = ctx.obj['ACCESS']
-    root = ctx.obj['ROOT']
-    app = ctx.obj['APP']
-    env = ctx.obj['ENV']
-    common = ctx.obj['COMMON']
-    config = \
-        load_config_from_consul(host, port, access, root, app, env, common)
-    if config:
-        _set_environment_variables(config, prefix)
+    if ctx.obj['CONFIG']:
+        _set_environment_variables(ctx.obj['CONFIG'], prefix)
     else:
         click.echo('No config for given keys')
         sys.exit(1)
@@ -81,25 +72,23 @@ def set_envs(ctx, prefix):  # pylint: disable=R0913
 @cli.command()
 @click.pass_context
 @click.option('--prefix', default='', help='Prefix for environment keys')
-def export(ctx, prefix):  # pylint: disable=R0913
+@click.option(
+    '-f',
+    '--format',
+    type=click.Choice(['json', 'bash'], case_sensitive=False),
+    default='bash',
+    show_default=True,
+    help='Format of exported data',
+)
+def export(ctx, prefix, format):  # pylint: disable=R0913,W0622
     "Print out bash command export for all found config"
-    host = ctx.obj['HOST']
-    port = ctx.obj['PORT']
-    access = ctx.obj['ACCESS']
-    root = ctx.obj['ROOT']
-    app = ctx.obj['APP']
-    env = ctx.obj['ENV']
-    common = ctx.obj['COMMON']
-    config = load_config_from_consul(
-        host, port, access, root, app, env, common,
-    )
-    envs = ' '.join(
-        f'{prefix}{key}="{_serialize_value(value)}"'
-        for key, value in config.items()
-    )
+    if format == 'bash':
+        envs = to_bash(ctx.obj['CONFIG'], prefix=prefix)
+    else:
+        envs = json.dumps(ctx.obj['CONFIG'])
     if not envs:
         sys.exit(1)
-    click.echo(f'export {envs}')
+    click.echo(envs)
 
 
 if __name__ == '__main__':

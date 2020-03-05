@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable
 
 from consul import Consul
 
@@ -9,14 +9,11 @@ def load_config_from_consul(  # pylint: disable=too-many-arguments
         host: str,
         port: int,
         token: str,
-        root_key: str,
-        app_key: str,
-        env_key: str,
-        common_key: Optional[str] = None,
-        value_deserializer=json.loads,
-        deserializer: Callable = lambda x: x,
+        key: str,
+        *other_keys: str,
+        deserializer: Callable = json.loads,
         **kwargs,
-) -> Union[object, dict]:
+) -> dict:
     """
     Load config from ``consul`` server.
 
@@ -45,26 +42,25 @@ def load_config_from_consul(  # pylint: disable=too-many-arguments
 
     :param str host: host of consule server
     :param int port:
-    :param str root_key:
-    :param str app_key:
-    :param str env_key:
-    :param str common_key:
+    :param str key:
+    :param str other_keys:
+    :param Callable deserializer:
     """
     server = Consul(host, port, token, **kwargs)
-    common_config = dict()
-    if common_key:
-        common_config = _get_config_for_keys_from_consul(
-            server,
-            f'{root_key}/{common_key}/{env_key}/',
-            deserializer=value_deserializer,
-        )
-
-    app_config = _get_config_for_keys_from_consul(
-        server,
-        f'{root_key}/{app_key}/{env_key}/',
-        deserializer=value_deserializer,
+    main_config = _get_config_for_keys_from_consul(
+        server, f'{key.strip("/")}/', deserializer=deserializer,
     )
-    configs = deserializer({**common_config, **app_config})
+    other_configs = list()
+    if other_keys:
+        other_configs = [
+            _get_config_for_keys_from_consul(
+                server, f'{other_key.strip("/")}/', deserializer=deserializer,
+            ) for other_key in other_keys
+        ]
+
+    configs = dict()
+    for config in [main_config, *other_configs][::-1]:
+        configs.update(config)
     return configs
 
 
@@ -81,14 +77,14 @@ def _get_config_for_keys_from_consul(
     }
 
 
-def _set_environment_variables(config: dict, prefix: str = '') -> None:
+def _serialize_value_to_json(value: Any) -> str:
+    return json.dumps(value) if not isinstance(value, (str)) else value
+
+
+def _set_environment_variables(
+        config: dict,
+        prefix: str = '',
+        serializer: Callable = _serialize_value_to_json,
+) -> None:
     for key, value in config.items():
-        os.environ[f'{prefix}{key}'] = _serialize_value(value)
-
-
-def _serialize_value(
-        value: Any,
-        serializer: Callable = lambda x: json.dumps(x)
-        if isinstance(x, (dict, list)) else str(x)
-) -> str:
-    return serializer(value)
+        os.environ[f'{prefix}{key}'] = serializer(value)

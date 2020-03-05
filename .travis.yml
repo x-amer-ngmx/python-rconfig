@@ -9,6 +9,10 @@ python:
 before_install:
   - pip install poetry
 
+after_success:
+  - pip install python-coveralls
+  - coveralls
+
 install:
   - poetry install -v -E cli
   - pip install tox-travis
