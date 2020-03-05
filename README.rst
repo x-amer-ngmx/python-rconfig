@@ -6,6 +6,9 @@ rconfig
 
   .. image:: http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat
 
+  .. image:: https://coveralls.io/repos/github/ArtemAngelchev/python-rconfig/badge.svg?branch=master
+      :target: https://coveralls.io/github/ArtemAngelchev/python-rconfig?branch=master
+
 
   ``rconfig`` helps you to bring configs from a consul server to your
   application.
