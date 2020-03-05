@@ -10,7 +10,7 @@ before_install:
   - pip install poetry
 
 after_success:
-  - pip install python-coveralls
+  - pip install coveralls
   - coveralls
 
 install:
