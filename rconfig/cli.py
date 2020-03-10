@@ -1,10 +1,9 @@
-import json
 import os
 import sys
 from pprint import pformat
 
 from rconfig import load_config_from_consul
-from rconfig.utils import to_bash, to_yaml
+from rconfig.utils import to_bash, to_json, to_yaml
 
 
 try:
@@ -64,7 +63,8 @@ def list(ctx):  # pylint: disable=redefined-builtin
     '-f',
     '--format',
     type=click.Choice(
-        ['json', 'bash:inline', 'yaml'], case_sensitive=False,
+        ['bash', 'bash:inline', 'yaml', 'yaml:shallow', 'json', 'json:pretty'],
+        case_sensitive=False,
     ),
     default='bash:inline',
     show_default=True,
@@ -72,12 +72,18 @@ def list(ctx):  # pylint: disable=redefined-builtin
 )
 def export(ctx, prefix, format):  # pylint: disable=R0913,W0622
     "Print out bash command export for all found config"
-    if format == 'bash:inline':
-        envs = to_bash(ctx.obj['CONFIG'], prefix=prefix)
-    elif format == 'yaml':
-        envs = to_yaml(ctx.obj['CONFIG'], prefix=prefix)
-    else:
-        envs = json.dumps(ctx.obj['CONFIG'])
+    if 'bash' in format:
+        envs = to_bash(
+            ctx.obj['CONFIG'], inline='inline' in format, prefix=prefix,
+        )
+    elif 'yaml' in format:
+        envs = to_yaml(
+            ctx.obj['CONFIG'], shallow='shallow' in format, prefix=prefix,
+        )
+    elif 'json' in format:
+        envs = to_json(
+            ctx.obj['CONFIG'], pretty='pretty' in format, prefix=prefix,
+        )
     if not envs:
         sys.exit(1)
     click.echo(envs)

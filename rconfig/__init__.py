@@ -1,6 +1,5 @@
 import json
-import os
-from typing import Any, Callable, Tuple
+from typing import Callable, Tuple
 
 from consul import Consul
 
@@ -66,16 +65,3 @@ def _get_config_for_keys_from_consul(
         config['Key'].lstrip(key): deserializer(config['Value'])
         for config in raw_configs
     }
-
-
-def _serialize_value_to_json(value: Any) -> str:
-    return json.dumps(value) if not isinstance(value, (str)) else value
-
-
-def _set_environment_variables(
-        config: dict,
-        prefix: str = '',
-        serializer: Callable = _serialize_value_to_json,
-) -> None:
-    for key, value in config.items():
-        os.environ[f'{prefix}{key}'] = serializer(value)
