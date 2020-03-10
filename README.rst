@@ -68,3 +68,61 @@ Usage
   Under common configuration key, you should store configurations that common
   to all your applications in the project, in this case, it's much easier to
   change the config in one place than go to multiple.
+
+
+Command-line Interface
+----------------------
+
+  CLI provides you the capability to load config from ``Consul``
+  (with a few ways) without a need of changing application code.
+
+  ::
+
+    Usage: rconfig [OPTIONS] COMMAND [ARGS]...
+
+    Options:
+      -h, --host TEXT     Host of a consul server  [required]
+      -a, --access TEXT   Access key for a consul server  [required]
+      -p, --port INTEGER  Port of consul server  [default: 8500]
+      -k, --key TEXT      Consul key  [required]
+      --help              Show this message and exit.
+
+    Commands:
+      export  Print out bash command export for all found config
+      list    Show all config for given keys
+
+
+  Let's see some examples.
+
+  ::
+
+    <your-awesome-app>
+        |____<prod>
+               |___<-env-key>
+               |___<some-env-key>
+
+
+  To load ``prod`` config of ``you-awesome-app``, issue:
+
+  ::
+
+    $ rconfig -h localhost -a access-key -k 'your-awesome-app/prod' list
+
+    {'LOG_LEVEL': 'WARNING',
+     'LOG_FILE_HANDLER': 1}
+
+
+  To export config to different formats, use:
+
+  ::
+
+    $ rconfig -h localhost -a access-key -k 'your-awesome-app/prod' export -f bash
+
+    export LOG_LEVEL='WARNING' LOG_FILE_HANDLER='1'
+
+
+  ::
+
+    $ rconfig -h localhost -a access-key -k 'your-awesome-app/prod' export -f json
+
+    {"LOG_LEVEL": "WARNING", "LOG_FILE_HANDLER": 1}
