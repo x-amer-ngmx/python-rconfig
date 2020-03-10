@@ -4,7 +4,7 @@ import sys
 from pprint import pformat
 
 from rconfig import load_config_from_consul
-from rconfig.utils import to_bash
+from rconfig.utils import to_bash, to_yaml
 
 
 try:
@@ -63,15 +63,19 @@ def list(ctx):  # pylint: disable=redefined-builtin
 @click.option(
     '-f',
     '--format',
-    type=click.Choice(['json', 'bash'], case_sensitive=False),
-    default='bash',
+    type=click.Choice(
+        ['json', 'bash:inline', 'yaml'], case_sensitive=False,
+    ),
+    default='bash:inline',
     show_default=True,
     help='Format of exported data',
 )
 def export(ctx, prefix, format):  # pylint: disable=R0913,W0622
     "Print out bash command export for all found config"
-    if format == 'bash':
+    if format == 'bash:inline':
         envs = to_bash(ctx.obj['CONFIG'], prefix=prefix)
+    elif format == 'yaml':
+        envs = to_yaml(ctx.obj['CONFIG'], prefix=prefix)
     else:
         envs = json.dumps(ctx.obj['CONFIG'])
     if not envs:

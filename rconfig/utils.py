@@ -1,7 +1,14 @@
+import sys
 from enum import Enum
 from typing import Callable, Optional
 
 from rconfig import _serialize_value_to_json
+
+
+try:
+    import yaml
+except ImportError:
+    yaml = None
 
 
 class ScriptFormat(Enum):
@@ -23,3 +30,16 @@ def to_bash(
     if not bash:
         return None
     return f'export {bash}' if inline else bash.rstrip('\n')
+
+
+def to_yaml(data: dict, prefix: str = '') -> Optional[str]:
+    if yaml is None:
+        sys.stderr.write(
+            'Missing yaml package.\nRun pip install "rconfig[yaml]"'
+        )
+    if not data:
+        return None
+    return yaml.dump(
+        {f'{prefix}{k}': v for k, v in data.items()},
+        default_flow_style=False,
+    )

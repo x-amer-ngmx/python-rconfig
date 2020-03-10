@@ -13,7 +13,8 @@ rconfig
   .. image:: http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat
 
 
-  ``rconfig`` helps you get configs of your application from a Consul server.
+  ``rconfig`` helps bring configuration, stored remotely on a ``Consul``
+  server, to  your application.
 
 
 Installation
@@ -23,14 +24,14 @@ Installation
 
   ::
 
-    pip install -U python-rconfig
+    pip3 install -U python-rconfig
 
 
   For command-line support, use the CLI option during installation:
 
   ::
 
-    pip install -U "python-rconfig[cli]"
+    pip3 install -U "python-rconfig[cli]"
 
 
 Usage
@@ -73,8 +74,8 @@ Usage
 Command-line Interface
 ----------------------
 
-  CLI provides you the capability to load config from ``Consul``
-  (with a few ways) without a need of changing application code.
+  CLI offers you an ability to load config from ``Consul`` (within a few ways)
+  without a need of changing application code.
 
   ::
 
