@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-rconfig"
-version = "20.2.0"
+version = "20.2.2"
 description = "Helps bring configuration, stored remotely on a ``Consul`` server, to  your application"
 license = "MIT"
 authors = ["Artem Angelchev <artangelchev@gmail.com>"]
