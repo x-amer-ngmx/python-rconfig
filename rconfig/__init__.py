@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Any, Callable
+from typing import Any, Callable, Tuple
 
 from consul import Consul
 
@@ -10,40 +10,31 @@ def load_config_from_consul(  # pylint: disable=too-many-arguments
         port: int,
         token: str,
         key: str,
-        *other_keys: str,
+        *other_keys: Tuple[str],
         deserializer: Callable = json.loads,
         **kwargs,
 ) -> dict:
     """
-    Load config from ``consul`` server.
+    Load config from a ``Consul`` server.
 
-    It expects the following key structure on ``consul`` side
+    ::
 
-    <root-key>
-        |____<common-config-key>
-        |          |
-        |          |___<some-env-key>
-        |          |           |_____<key-value>
-        |          |           |_____<key-value>
-        |          |
-        |          |___<another-env-key>
-        |                      |_____<key-value>
-        |                      |_____<key-value>
-        |____<app-config-key>
-                   |
-                   |___<some-env-key>
-                   |           |_____<key-value>
-                   |           |_____<key-value>
-                   |
-                   |___<another-env-key>
-                               |_____<key-value>
-                               |_____<key-value>
+      <path-to-app-config>
+          |___LOG_LEVEL=INFO
+          |___DEBUG=false
 
+    Suppose you have created config of your app on the path
+    ``path-to-app-config`` on ``Consul`` server.
 
-    :param str host: host of consule server
-    :param int port:
-    :param str key:
-    :param str other_keys:
+    If passed multiple keys for configs
+    will merge them with priority from first mension to last mension.
+
+    :param str host: host of a ``Consul`` server
+    :param int port: port of a ``Consul`` server
+    :param str token: access key to a ``Consul`` server
+    :param str key: key path to a main config
+    :param Tuple[str] other_keys: other paths to configs that should be merged
+      with a main config
     :param Callable deserializer:
     """
     server = Consul(host, port, token, **kwargs)

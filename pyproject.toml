@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-rconfig"
-version = "20.1.0"
+version = "20.1.1"
 description = "Helps get configuration from consul server"
 license = "MIT"
 authors = ["Artem Angelchev <artangelchev@gmail.com>"]
@@ -41,6 +41,7 @@ pytest = "^5.3.5"
 pytest-cov = "^2.8.1"
 pylint = "^2.4.4"
 flake8 = "^3.7.9"
+sphinx = "^2.4.4"
 
 [tool.poetry.extras]
 cli = ["click"]

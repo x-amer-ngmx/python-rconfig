@@ -3,7 +3,7 @@ import os
 import sys
 from pprint import pformat
 
-from rconfig import _set_environment_variables, load_config_from_consul
+from rconfig import load_config_from_consul
 from rconfig.utils import to_bash
 
 
@@ -52,18 +52,6 @@ def list(ctx):  # pylint: disable=redefined-builtin
     "Show all config for given keys"
     if ctx.obj['CONFIG']:
         click.echo(pformat(ctx.obj['CONFIG']))
-    else:
-        click.echo('No config for given keys')
-        sys.exit(1)
-
-
-@cli.command()
-@click.pass_context
-@click.option('--prefix', default='', help='Prefix for environment keys')
-def set_envs(ctx, prefix):  # pylint: disable=R0913
-    "Set envs in current subprocess"
-    if ctx.obj['CONFIG']:
-        _set_environment_variables(ctx.obj['CONFIG'], prefix)
     else:
         click.echo('No config for given keys')
         sys.exit(1)

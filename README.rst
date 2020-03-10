@@ -13,8 +13,7 @@ rconfig
   .. image:: http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat
 
 
-  ``rconfig`` helps you to bring configs from a consul server to your
-  application.
+  ``rconfig`` helps you get configs of your application from a Consul server.
 
 
 Installation

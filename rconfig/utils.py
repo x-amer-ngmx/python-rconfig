@@ -18,7 +18,7 @@ def to_bash(
     inline = ScriptFormat.inline == format
     bash = str()
     for key, value in data.items():
-        line = f'{prefix}{key}="{serializer(value)}"'
+        line = f'{prefix}{key}={serializer(value)!r}'
         bash += f' {line}' if inline else f'export {line}\n'
     if not bash:
         return None
