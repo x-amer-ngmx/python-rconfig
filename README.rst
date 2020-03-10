@@ -93,14 +93,14 @@ Command-line Interface
       list    Show all config for given keys
 
 
-  Let's see some examples.
+  Let's look at few examples.
 
   ::
 
     <your-awesome-app>
         |____<prod>
-               |___<-env-key>
-               |___<some-env-key>
+               |___<LOG_LEVEL -> "WARNING">
+               |___<LOG_FILE_HANDLER -> 1>
 
 
   To load ``prod`` config of ``you-awesome-app``, issue:
@@ -115,15 +115,33 @@ Command-line Interface
 
   To export config to different formats, use:
 
+  Bash:
   ::
 
     $ rconfig -h localhost -a access-key -k 'your-awesome-app/prod' export -f bash
 
+    export LOG_LEVEL='WARNING'
+    export LOG_FILE_HANDLER='1'
+
+  ::
+
+    $ rconfig -h localhost -a access-key -k 'your-awesome-app/prod' export -f bash:inline
+
     export LOG_LEVEL='WARNING' LOG_FILE_HANDLER='1'
 
 
+  Json:
   ::
 
     $ rconfig -h localhost -a access-key -k 'your-awesome-app/prod' export -f json
 
     {"LOG_LEVEL": "WARNING", "LOG_FILE_HANDLER": 1}
+
+  ::
+
+    $ rconfig -h localhost -a access-key -k 'your-awesome-app/prod' export -f json:pretty
+
+    {
+        "LOG_LEVEL": "WARNING",
+        "LOG_FILE_HANDLER": 1
+    }
