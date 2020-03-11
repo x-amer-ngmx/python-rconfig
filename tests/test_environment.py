@@ -1,7 +1,7 @@
 import os
 from unittest import mock
 
-from rconfig.utils import set_environment_variables
+from rconfig.utils import set_envs
 
 
 @mock.patch.dict(os.environ, dict(), clear=True)
@@ -14,7 +14,7 @@ def test_subprocess_env():
         'RCONFIG_TEST_DICT': {'test1': 1, 'test2': 'TEST', 'test3': True},
 
     }
-    set_environment_variables(data)
+    set_envs(data)
     assert os.environ['RCONFIG_TEST_INT'] == '1'
     assert os.environ['RCONFIG_TEST_STR'] == 'TEST'
     assert os.environ['RCONFIG_TEST_BOOL'] == 'true'
@@ -33,7 +33,7 @@ def test_subprocess_env_prefix():
         'RCONFIG_TEST_DICT': {'test1': 1, 'test2': 'TEST', 'test3': True},
 
     }
-    set_environment_variables(data, 'PREFIX_')
+    set_envs(data, 'PREFIX_')
     assert os.environ['PREFIX_RCONFIG_TEST_INT'] == '1'
     assert os.environ['PREFIX_RCONFIG_TEST_STR'] == 'TEST'
     assert os.environ['PREFIX_RCONFIG_TEST_BOOL'] == 'true'

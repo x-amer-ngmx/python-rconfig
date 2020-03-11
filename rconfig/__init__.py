@@ -3,6 +3,30 @@ from typing import Callable, Tuple
 
 from consul import Consul
 
+from rconfig.utils import set_envs
+
+
+def load_envs_from_consul(
+        host: str,
+        port: int,
+        token: str,
+        key: str,
+        *other_keys: Tuple[str],
+        prefix: str = '',
+        deserializer: Callable = json.loads,
+        **kwargs,
+) -> None:
+    data = load_config_from_consul(
+        host,
+        port,
+        token,
+        key,
+        *other_keys,
+        deserializer=deserializer,
+        **kwargs,
+    )
+    set_envs(data, prefix=prefix)
+
 
 def load_config_from_consul(  # pylint: disable=too-many-arguments
         host: str,
@@ -14,7 +38,7 @@ def load_config_from_consul(  # pylint: disable=too-many-arguments
         **kwargs,
 ) -> dict:
     """
-    Load config from a ``Consul`` server.
+    Load config from a ``Consul`` server to a ``dict``.
 
     ::
 

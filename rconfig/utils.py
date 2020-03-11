@@ -50,6 +50,17 @@ def to_yaml(
     )
 
 
+def to_dotenv(
+        data: dict,
+        serializer: Callable = (
+            lambda x: x if isinstance(x, str) else json.dumps(x)
+        ),
+        prefix: str = '',
+) -> Optional[str]:
+    envs = '\n'.join(f'{prefix}{k}={serializer(v)!r}' for k, v in data.items())
+    return envs if envs else None
+
+
 def to_json(
         data: dict,
         pretty: bool = False,
@@ -63,7 +74,7 @@ def to_json(
     )
 
 
-def set_environment_variables(
+def set_envs(
         data: dict,
         prefix: str = '',
         serializer: Callable = (

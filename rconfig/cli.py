@@ -3,7 +3,7 @@ import sys
 from pprint import pformat
 
 from rconfig import load_config_from_consul
-from rconfig.utils import to_bash, to_json, to_yaml
+from rconfig.utils import to_bash, to_dotenv, to_json, to_yaml
 
 
 try:
@@ -63,7 +63,15 @@ def list(ctx):  # pylint: disable=redefined-builtin
     '-f',
     '--format',
     type=click.Choice(
-        ['bash', 'bash:inline', 'yaml', 'yaml:shallow', 'json', 'json:pretty'],
+        [
+            'bash',
+            'bash:inline',
+            'yaml',
+            'yaml:shallow',
+            'json',
+            'json:pretty',
+            'dotenv'
+        ],
         case_sensitive=False,
     ),
     default='bash:inline',
@@ -84,6 +92,8 @@ def export(ctx, prefix, format):  # pylint: disable=R0913,W0622
         envs = to_json(
             ctx.obj['CONFIG'], pretty='pretty' in format, prefix=prefix,
         )
+    elif format == 'dotenv':
+        envs = to_dotenv(ctx.obj['CONFIG'], prefix=prefix)
     if not envs:
         sys.exit(1)
     click.echo(envs)

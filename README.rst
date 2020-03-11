@@ -34,6 +34,13 @@ Installation
     pip3 install -U "python-rconfig[cli]"
 
 
+  For command-line and yaml support:
+
+  ::
+
+    pip3 install -U "python-rconfig[cli,yaml]"
+
+
 Usage
 -----
 
@@ -129,6 +136,13 @@ Command-line Interface
 
     export LOG_LEVEL='WARNING' LOG_FILE_HANDLER='1'
 
+  Yaml:
+  ::
+
+    $ rconfig -h localhost -a access-key -k 'your-awesome-app/prod' export -f yaml
+
+    LOG_LEVEL: WARNING
+    LOG_FILE_HANDLER: 1
 
   Json:
   ::
