@@ -57,7 +57,7 @@ def to_dotenv(
         ),
         prefix: str = '',
 ) -> Optional[str]:
-    envs = '\n'.join(f'{prefix}{k}={serializer(v)!r}' for k, v in data.items())
+    envs = '\n'.join(f'{prefix}{k}={serializer(v)}' for k, v in data.items())
     return envs if envs else None
 
 
