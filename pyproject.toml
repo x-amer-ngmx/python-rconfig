@@ -4,8 +4,8 @@ version = "20.2.5"
 description = "Helps bring configuration, stored remotely on a ``Consul`` server, to  your application"
 license = "MIT"
 authors = ["Artem Angelchev <artangelchev@gmail.com>"]
-homepage = "https://github.com/ArtemAngelchev/python-rconfig"
-repository = "https://github.com/ArtemAngelchev/python-rconfig"
+homepage = "https://github.com/x-amer-ngmx/python-rconfig"
+repository = "https://github.com/x-amer-ngmx/python-rconfig"
 packages = [{ include = "rconfig" }]
 readme = "README.rst"
 keywords = [
