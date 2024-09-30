@@ -84,7 +84,7 @@ def _get_config_for_keys_from_consul(
         deserializer: Callable,
 ) -> dict:
     _, raw_configs = server.kv.get(key, recurse=True)
-    if not raw_configs[0]['Values']:
+    if not raw_configs[0]['Value']:
         raw_configs = raw_configs[1:]
     raw_configs = raw_configs[0:] if raw_configs else list()
     return {
